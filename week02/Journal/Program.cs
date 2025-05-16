@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 
 public class Entry
 {
@@ -46,6 +47,8 @@ public class Entry
         Console.WriteLine($"Mood Rating: {_moodRating}");
         Console.WriteLine(new string('-', 40));
     }
+
+    public int MoodRating => _moodRating; // Expose MoodRating for analysis
 }
 
 public class Journal
@@ -112,6 +115,52 @@ public class Journal
             }
         }
     }
+
+    // Searches for entries containing the specified tag or keyword
+    public void SearchEntries(string query)
+    {
+        var foundEntries = _entries.FindAll(e => e.ToFileString().Contains(query, StringComparison.OrdinalIgnoreCase));
+
+        if (foundEntries.Count == 0)
+        {
+            Console.WriteLine("No entries found containing that tag or keyword.");
+            return;
+        }
+
+        Console.WriteLine($"\nEntries containing '{query}':");
+        foreach (var entry in foundEntries)
+        {
+            entry.Display();
+        }
+    }
+
+    // Exports the journal entries to a JSON file
+    public void ExportToJson(string filename)
+    {
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        string jsonString = JsonSerializer.Serialize(_entries, options);
+        File.WriteAllText(filename, jsonString);
+    }
+
+    // Displays a simple mood analysis based on the entries
+    public void DisplayMoodAnalysis()
+    {
+        if (_entries.Count == 0)
+        {
+            Console.WriteLine("No entries to analyze.");
+            return;
+        }
+
+        double averageMood = 0;
+        foreach (var entry in _entries)
+        {
+            averageMood += entry.MoodRating;
+        }
+        averageMood /= _entries.Count;
+
+        Console.WriteLine($"\nAverage Mood Rating: {averageMood:F2}");
+        Console.WriteLine("Mood Analysis: " + (averageMood >= 7 ? "Positive" : averageMood >= 4 ? "Neutral" : "Negative"));
+    }
 }
 
 class Program
@@ -137,7 +186,10 @@ class Program
             Console.WriteLine("2. Display the journal");
             Console.WriteLine("3. Save the journal to a file");
             Console.WriteLine("4. Load the journal from a file");
-            Console.WriteLine("5. Quit");
+            Console.WriteLine("5. Search journal entries by tag or keyword");
+            Console.WriteLine("6. Export journal to JSON");
+            Console.WriteLine("7. View mood analysis");
+            Console.WriteLine("8. Quit");
             Console.Write("Choose an option: ");
             string choice = Console.ReadLine();
 
@@ -175,6 +227,23 @@ class Program
                     break;
 
                 case "5":
+                    Console.Write("Enter a tag or keyword to search: ");
+                    string searchQuery = Console.ReadLine();
+                    journal.SearchEntries(searchQuery);
+                    break;
+
+                case "6":
+                    Console.Write("Enter filename to export to JSON: ");
+                    string jsonFilename = Console.ReadLine();
+                    journal.ExportToJson(jsonFilename);
+                    Console.WriteLine("Journal exported to JSON.");
+                    break;
+
+                case "7":
+                    journal.DisplayMoodAnalysis();
+                    break;
+
+                case "8":
                     UpdateReminder();
                     return;
 
