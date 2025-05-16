@@ -48,6 +48,72 @@ public class Entry
     }
 }
 
+public class Journal
+{
+    private List<Entry> _entries = new List<Entry>();
+
+    // Adds a new entry to the journal
+    public void AddEntry(string prompt, string response, string tags, int moodRating)
+    {
+        _entries.Add(new Entry(prompt, response, tags, moodRating));
+    }
+
+    // Displays all entries in the journal
+    public void DisplayEntries()
+    {
+        if (_entries.Count == 0)
+        {
+            Console.WriteLine("No entries found.");
+            return;
+        }
+
+        foreach (var entry in _entries)
+        {
+            entry.Display();
+        }
+    }
+
+    // Saves all entries to a file
+    public void SaveToFile(string filename)
+    {
+        using (StreamWriter writer = new StreamWriter(filename))
+        {
+            foreach (var entry in _entries)
+            {
+                writer.WriteLine(entry.ToFileString());
+            }
+        }
+    }
+
+    // Loads entries from a file
+    public void LoadFromFile(string filename)
+    {
+        if (!File.Exists(filename))
+        {
+            Console.WriteLine("File not found.");
+            return;
+        }
+
+        _entries.Clear();
+        string[] lines = File.ReadAllLines(filename);
+
+        foreach (string line in lines)
+        {
+            string[] parts = line.Split('|');
+            if (parts.Length == 5)
+            {
+                string date = parts[0];
+                string prompt = parts[1];
+                string response = parts[2];
+                string tags = parts[3];
+                int moodRating = int.Parse(parts[4]);
+
+                _entries.Add(new Entry(date, prompt, response, tags, moodRating));
+            }
+        }
+    }
+}
+
 class Program
 {
     static void Main(string[] args)
