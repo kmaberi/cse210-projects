@@ -3,54 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 
-public class Entry
-{
-    private string _prompt;
-    private string _response;
-    private string _date;
-    private string _tags;
-    private int _moodRating;
-
-    // Constructor for new entries
-    public Entry(string prompt, string response, string tags, int moodRating)
-    {
-        _prompt = prompt;
-        _response = response;
-        _tags = tags;
-        _moodRating = moodRating;
-        _date = DateTime.Now.ToShortDateString();
-    }
-
-    // Constructor for loading entries from a file
-    public Entry(string date, string prompt, string response, string tags, int moodRating)
-    {
-        _date = date;
-        _prompt = prompt;
-        _response = response;
-        _tags = tags;
-        _moodRating = moodRating;
-    }
-
-    // Formats this entry as a line suitable for saving
-    public string ToFileString()
-    {
-        return $"{_date}|{_prompt}|{_response}|{_tags}|{_moodRating}";
-    }
-
-    // Displays this entry to the console
-    public void Display()
-    {
-        Console.WriteLine($"Date: {_date}");
-        Console.WriteLine($"Prompt: {_prompt}");
-        Console.WriteLine($"Response: {_response}");
-        Console.WriteLine($"Tags: {_tags}");
-        Console.WriteLine($"Mood Rating: {_moodRating}");
-        Console.WriteLine(new string('-', 40));
-    }
-
-    public int MoodRating => _moodRating; // Expose MoodRating for analysis
-}
-
 public class Journal
 {
     private List<Entry> _entries = new List<Entry>();
@@ -161,6 +113,54 @@ public class Journal
         Console.WriteLine($"\nAverage Mood Rating: {averageMood:F2}");
         Console.WriteLine("Mood Analysis: " + (averageMood >= 7 ? "Positive" : averageMood >= 4 ? "Neutral" : "Negative"));
     }
+}
+
+public class Entry
+{
+    private string _prompt;
+    private string _response;
+    private string _date;
+    private string _tags;
+    private int _moodRating;
+
+    // Constructor for new entries
+    public Entry(string prompt, string response, string tags, int moodRating)
+    {
+        _prompt = prompt;
+        _response = response;
+        _tags = tags;
+        _moodRating = moodRating;
+        _date = DateTime.Now.ToShortDateString();
+    }
+
+    // Constructor for loading entries from a file
+    public Entry(string date, string prompt, string response, string tags, int moodRating)
+    {
+        _date = date;
+        _prompt = prompt;
+        _response = response;
+        _tags = tags;
+        _moodRating = moodRating;
+    }
+
+    // Formats this entry as a line suitable for saving
+    public string ToFileString()
+    {
+        return $"{_date}|{_prompt}|{_response}|{_tags}|{_moodRating}";
+    }
+
+    // Displays this entry to the console
+    public void Display()
+    {
+        Console.WriteLine($"Date: {_date}");
+        Console.WriteLine($"Prompt: {_prompt}");
+        Console.WriteLine($"Response: {_response}");
+        Console.WriteLine($"Tags: {_tags}");
+        Console.WriteLine($"Mood Rating: {_moodRating}");
+        Console.WriteLine(new string('-', 40));
+    }
+
+    public int MoodRating => _moodRating; // Expose MoodRating for analysis
 }
 
 class Program
