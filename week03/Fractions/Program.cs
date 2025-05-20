@@ -173,6 +173,46 @@ class Program
             scripture = scriptures[rand.Next(scriptures.Count)];
         }
 
+        int totalWords = scripture.GetTotalWords();
+        int hiddenWords = 0;
+
+        while (true)
+        {
+            Console.Clear();
+            Console.WriteLine(scripture.GetDisplayText());
+            Console.WriteLine($"\nProgress: {hiddenWords}/{totalWords} words hidden.");
+            Console.WriteLine("\nType 'save' to save progress, 'load' to load progress, or press Enter to continue:");
+
+            string input = Console.ReadLine();
+            if (input.ToLower() == "quit")
+            {
+                break;
+            }
+            else if (input.ToLower() == "save")
+            {
+                scripture.SaveProgress("progress.txt");
+                Console.WriteLine("Progress saved.");
+                continue;
+            }
+            else if (input.ToLower() == "load")
+            {
+                scripture.LoadProgress("progress.txt");
+                Console.WriteLine("Progress loaded.");
+                continue;
+            }
+
+            int newlyHidden = scripture.HideRandomWords(3);
+            hiddenWords += newlyHidden;
+
+            if (hiddenWords >= totalWords)
+            {
+                Console.Clear();
+                Console.WriteLine(scripture.GetDisplayText());
+                Console.WriteLine("\nAll words are hidden. Goodbye!");
+                break;
+            }
+        }
+
         int timeLimit = 60; // 60 seconds
         DateTime startTime = DateTime.Now;
 
