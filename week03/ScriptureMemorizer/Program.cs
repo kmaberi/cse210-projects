@@ -1,8 +1,5 @@
 // Program.cs
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using ScriptureMemorizer;
 
 namespace ScriptureMemorizer
 {
@@ -19,7 +16,8 @@ namespace ScriptureMemorizer
             {
                 Console.Clear();
                 Console.WriteLine(scripture.GetDisplayText());
-                Console.WriteLine("\nPress Enter to hide words or type 'quit' to exit.");
+                Console.WriteLine("
+Press Enter to hide words or type 'quit' to exit.");
 
                 string input = Console.ReadLine();
                 if (input != null && input.Trim().ToLower() == "quit")
@@ -31,14 +29,21 @@ namespace ScriptureMemorizer
                 {
                     Console.Clear();
                     Console.WriteLine(scripture.GetDisplayText());
-                    Console.WriteLine("\nAll words are hidden. Goodbye!");
+                    Console.WriteLine("
+All words are hidden. Goodbye!");
                     break;
                 }
             }
         }
     }
+}
 
-    // Reference.cs
+
+// Reference.cs
+using System;
+
+namespace ScriptureMemorizer
+{
     public class Reference
     {
         private string _book;
@@ -61,8 +66,14 @@ namespace ScriptureMemorizer
                 : $"{_book} {_chapter}:{_startVerse}-{_endVerse}";
         }
     }
+}
 
-    // Word.cs
+
+// Word.cs
+using System;
+
+namespace ScriptureMemorizer
+{
     public class Word
     {
         private string _text;
@@ -80,15 +91,18 @@ namespace ScriptureMemorizer
 
         public string GetDisplayText()
         {
-            // Show underscores matching word length when hidden
             return _isHidden ? new string('_', _text.Length) : _text;
         }
     }
+}
 
-    // Scripture.cs
-    using System.Collections.Generic;
-    using System.Linq;
 
+// Scripture.cs
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ScriptureMemorizer
+{
     public class Scripture
     {
         private Reference _reference;
@@ -97,7 +111,6 @@ namespace ScriptureMemorizer
         public Scripture(Reference reference, string text)
         {
             _reference = reference;
-            // Split on spaces and preserve punctuation
             _words = text.Split(' ').Select(w => new Word(w)).ToList();
         }
 
@@ -105,10 +118,10 @@ namespace ScriptureMemorizer
         {
             string referenceText = _reference.GetDisplayText();
             string wordsText = string.Join(" ", _words.Select(w => w.GetDisplayText()));
-            return $"{referenceText}\n{wordsText}";
+            return $"{referenceText}
+{wordsText}";
         }
 
-        // HideRandomWords returns false when no words left to hide
         public bool HideRandomWords(int count)
         {
             var visibleWords = _words.Where(w => !w.IsHidden()).ToList();
