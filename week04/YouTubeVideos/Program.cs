@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-class Comment
+public class Comment
 {
     public string Name { get; set; }
     public string Text { get; set; }
@@ -13,7 +13,7 @@ class Comment
     }
 }
 
-class Video
+public class Video
 {
     public string Title { get; set; }
     public string Author { get; set; }
