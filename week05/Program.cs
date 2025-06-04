@@ -1,16 +1,34 @@
+using System;
+
 class Program
 {
     static void Main(string[] args)
     {
-        Assignment a1 = new Assignment("Samuel Bennett", "Multiplication");
-        Console.WriteLine(a1.GetSummary());
+        while (true)
+        {
+            Console.Clear();
+            Console.WriteLine("Mindfulness Program\n");
+            Console.WriteLine("Menu Options:");
+            Console.WriteLine("1. Start Breathing Activity");
+            Console.WriteLine("2. Start Reflection Activity");
+            Console.WriteLine("3. Start Listing Activity");
+            Console.WriteLine("4. Quit");
+            Console.Write("Select a choice from the menu: ");
+            string choice = Console.ReadLine();
 
-        MathAssignment m1 = new MathAssignment("Roberto Rodriguez", "Fractions", "7.3", "8-19");
-        Console.WriteLine(m1.GetSummary());
-        Console.WriteLine(m1.GetHomeworkList());
-
-        WritingAssignment w1 = new WritingAssignment("Mary Waters", "European History", "The Causes of World War II");
-        Console.WriteLine(w1.GetSummary());
-        Console.WriteLine(w1.GetWritingInformation());
+            if (choice == "1")
+                new BreathingActivity().Start();
+            else if (choice == "2")
+                new ReflectionActivity().Start();
+            else if (choice == "3")
+                new ListingActivity().Start();
+            else if (choice == "4")
+                break;
+            else
+            {
+                Console.WriteLine("Invalid input. Press enter to continue.");
+                Console.ReadLine();
+            }
+        }
     }
 }
