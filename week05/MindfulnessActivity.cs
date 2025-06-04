@@ -18,7 +18,10 @@ public abstract class MindfulnessActivity
         Console.Clear();
         Console.WriteLine($"Welcome to the {_name}.\n{_description}");
         Console.Write("How many seconds would you like for this session? ");
-        _duration = int.Parse(Console.ReadLine());
+        while (!int.TryParse(Console.ReadLine(), out _duration) || _duration <= 0)
+        {
+            Console.Write("Please enter a positive number of seconds: ");
+        }
         Console.WriteLine("Prepare to begin...");
         ShowSpinner(3);
         PerformActivity();
